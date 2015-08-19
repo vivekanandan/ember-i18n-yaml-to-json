@@ -5,7 +5,8 @@ module.exports = function(/* environment, appConfig */) {
 	    //i18n yaml & js location path reference should be from frontend dir
 	    i18n:{
 	      yamlDir:"../config/locales/", //source
-	      jsDir: "./app/locales/" //destination
+	      jsDir: "./app/locales/", //destination
+		defaultLocale: "en"
 	    }
   };
 };

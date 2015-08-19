@@ -18,16 +18,17 @@ var YAMLToJSON ={
     var path = this.parsePath();
     var yamlDir = path.yaml;
     var jsDir = path.js;
+    var defaultLocale = path.locale;
     var files = fs.readdirSync(yamlDir);
     if(!fs.existsSync(jsDir)){
       fs.mkdirSync(jsDir);
     }
-    this.extractRefDoc(yamlDir,jsDir);
+    this.extractRefDoc(yamlDir,jsDir,defaultLocale);
     for(var i=0;i<files.length;i++){
       var yamlFileURL = yamlDir+"/"+files[i];
-      if(pathChecker.extname(files[i])!=".yml" || files[i]=="en.yml"){continue;}
+      if(pathChecker.extname(files[i])!=".yml" || files[i]==(defaultLocale+".yml")){continue;}
       var locale = files[i].split(".")[0];
-      this.comparableDoc = this.toJSON(yamlFileURL,locale);
+      this.comparableDoc = this.toJSON(yamlFileURL,defaultLocale);
       this.doctorMissingElements(this.refDoc);
       this.writeToJS(jsDir,locale,this.comparableDoc);
     }
@@ -35,10 +36,10 @@ var YAMLToJSON ={
   },
   refDoc:null,
   comparableDoc:null,
-  extractRefDoc:function(refDir,jsDir){
-    var refURL = refDir+"/en.yml";
-    this.refDoc = this.toJSON(refURL,"en");
-    this.writeToJS(jsDir,"en",this.refDoc);
+  extractRefDoc:function(refDir,jsDir,defaultLocale){
+    var refURL = refDir+"/"+defaultLocale+".yml";
+    this.refDoc = this.toJSON(refURL,defaultLocale);
+    this.writeToJS(jsDir,defaultLocale,this.refDoc);
   },
   writeToJS:function(jsDir,locale,content){
     var localeDir = jsDir+"/"+locale;
@@ -78,16 +79,21 @@ var YAMLToJSON ={
     var config = require('ember-i18n-yaml-to-json/config/environment')();
     var path = {
         yaml: config.i18n.yamlDir,
-        js: config.i18n.jsDir
+        js: config.i18n.jsDir,
+	   locale: config.i18n.defaultLocale
       };
     var JS_PATH_TOKEN = "--js-path=";
     var YAML_PATH_TOKEN = "--yaml-path=";
+    var DEFAULT_LOCALE_TOKEN = "--default-locale=";
     for(var i=0;i<process.argv.length;i++){
       if(process.argv[i].indexOf(JS_PATH_TOKEN)!=-1){
         path["js"] = process.argv[i].split(JS_PATH_TOKEN)[1];
       }
       else if(process.argv[i].indexOf(YAML_PATH_TOKEN)!=-1){
         path["yaml"] = process.argv[i].split(YAML_PATH_TOKEN)[1];
+      }
+	 else if(process.argv[i].indexOf(DEFAULT_LOCALE_TOKEN)!=-1){
+        path["locale"] = process.argv[i].split(DEFAULT_LOCALE_TOKEN)[1];
       }
     }
     return path;
