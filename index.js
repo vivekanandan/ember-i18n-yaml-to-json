@@ -75,7 +75,7 @@ var YAMLToJSON ={
     }      
   },
   parsePath: function(){
-    var config = require('../config/environment')();
+    var config = require('ember-i18n-yaml-to-json/config/environment')();
     var path = {
         yaml: config.i18n.yamlDir,
         js: config.i18n.jsDir
@@ -96,5 +96,5 @@ var YAMLToJSON ={
 
 module.exports = {
 	name:"ember-i18n-yaml-to-json",
-	converter:YAMLToJSON.convert
+	engine:YAMLToJSON
 };
