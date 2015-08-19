@@ -7,7 +7,7 @@
   *   --yaml-path=<YAML DIRECTORY LOCATION>
   *   --js-path=<JS DIRECTORY LOCATION>
   * if no params given, it will take the default path as.
-  *     --yaml-path="../freshsales/config/locales/"
+  *     --yaml-path="../config/locales/"
   *   --js-path="./app/locales/"
   **/
 var yaml = require('js-yaml');
