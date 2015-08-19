@@ -1,6 +1,6 @@
 {
   "name": "ember-i18n-yaml-to-json",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "The default blueprint for ember-cli addons.",
   "directories": {
     "doc": "doc",
@@ -34,7 +34,8 @@
     "ember-disable-proxy-controllers": "^1.0.0",
     "ember-export-application-global": "^1.0.2",
     "ember-disable-prototype-extensions": "^1.0.0",
-    "ember-try": "0.0.6"
+    "ember-try": "0.0.6",
+    "js-yaml": "^3.3.1"
   },
   "keywords": [
     "ember-addon"
