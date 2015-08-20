@@ -6,16 +6,13 @@
   * params: 
   *   --yaml-path=<YAML DIRECTORY LOCATION>
   *   --js-path=<JS DIRECTORY LOCATION>
-  * if no params given, it will take the default path as.
-  *     --yaml-path="../config/locales/"
-  *   --js-path="./app/locales/"
   **/
 var yaml = require('js-yaml');
 var fs = require('fs');
 var YAMLToJSON ={
   convert: function(){
     var pathChecker = require('path');
-    var path = this.parsePath();
+    var path = this.parsePath(arguments[0]);
     var yamlDir = path.yaml;
     var jsDir = path.js;
     var defaultLocale = path.locale;
@@ -77,10 +74,11 @@ var YAMLToJSON ={
   },
   parsePath: function(){
     var config = require('ember-i18n-yaml-to-json/config/environment')();
+    var params = arguments[0] || {};
     var path = {
-        yaml: config.i18n.yamlDir,
-        js: config.i18n.jsDir,
-	   locale: config.i18n.defaultLocale
+        yaml: (params.yamlDir || config.i18n.yamlDir),
+        js: (params.jsDir || config.i18n.jsDir),
+	   locale: (params.defaultLocale || config.i18n.defaultLocale)
       };
     var JS_PATH_TOKEN = "--js-path=";
     var YAML_PATH_TOKEN = "--yaml-path=";

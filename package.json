@@ -1,6 +1,6 @@
 {
   "name": "ember-i18n-yaml-to-json",
-  "version": "0.1.8",
+  "version": "0.1.10",
   "description": "The default blueprint for ember-cli addons.",
   "directories": {
     "doc": "doc",
