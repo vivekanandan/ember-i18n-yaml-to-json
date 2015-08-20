@@ -45,11 +45,17 @@
 yamlToJsonEngine.convert();<br></p>
 </li>
 <li><p><code>ember build --yaml-path=&lt;YAML_PATH&gt; --js-path=&lt;JS_PATH&gt; --default-locale=en</code></p></li>
+<li>
+<p>You can even overwrite the parameters during conversion<br></p>
+
+<code>yamlToJsonEngine.convert({yamlDir:"&lt;YAML_PATH&gt;",jsDir:"&lt;JS_PATH&gt;",defaultLocale:"en"});</code><br>
+<p>Ignore the params during <code>ember build</code>. If you give any, then command-line params will overwrite the params given during function call.</p><br>
+</li>
 </ul>
 
-<p>This addon will help those who juggle between yml &amp; js for i18n translations. If you are using yml file(as in Ruby on Rails "config/locales") for your backend translations and js file (as in ember-i18n "app/locales/en/translations") for frontend translations. It will enable you to maintain your i18n translations in a centralized location(.yml) by converting all your translation file to js format during "ember build". It also has a fallback mechanism with en.yml as reference doc, any missing key will grab the value from en.yml during conversion.</p>
+<p>It will help you get rid of the pain in juggling between yml & js for i18n translations. I mean, yml file(as in Ruby on Rails "config/locales") for your backend translations and js file (as in ember-i18n "app/locales/en/translations") for frontend translations. It will enable you to maintain your i18n translations in a centralized location(.yml) by converting all your translation file to js format during "ember build". It also has a fallback mechanism with reference to your default locale, any missing key will grab the value from "default-locale"( or en.yml) during conversion.</p>
 
-<p>PS: this addon currently supports the locale path format as in ember-i18n, i.e., your yml files will be placed at //translations.js</p>
+<p>PS: this addon currently supports the locale path format as in ember-i18n, i.e., your yml files will be placed at $JS_PATH/$LOCALE/translations.js</p>
         </section>
 
         <aside id="sidebar">
