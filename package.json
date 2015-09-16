@@ -1,6 +1,6 @@
 {
   "name": "ember-i18n-yaml-to-json",
-  "version": "0.1.10",
+  "version": "0.1.12",
   "description": "Converts yaml files to js files, lets you maintain all your translations at one place.",
   "directories": {
     "doc": "doc",
