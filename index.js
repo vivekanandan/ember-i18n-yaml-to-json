@@ -56,8 +56,8 @@ var YAMLToJSON ={
   doctorMissingElements:function(doc){
     for(var key in doc){        
       this.keyChain.push(key);
-      var actual = eval("this.refDoc."+this.keyChain.join("."));
-      var comparable = eval("this.comparableDoc."+this.keyChain.join("."));
+      var actual = this["refDoc."+this.keyChain.join(".")];
+      var comparable = this["comparableDoc."+this.keyChain.join(".")];
       var actualType = typeof actual;
       var comparableType = typeof comparable;
       if((actual instanceof Object) && (comparable!=undefined && (actualType==comparableType))){
@@ -66,7 +66,7 @@ var YAMLToJSON ={
       else{
         var actualKey = this.keyChain.join(".");
         if(comparable ==undefined || (actualType != comparableType)){
-          eval("this.comparableDoc."+actualKey+"=this.refDoc."+actualKey);
+          this["comparableDoc."+actualKey] = this["refDoc."+actualKey];
         }
       }        
       this.keyChain.pop();
@@ -78,7 +78,7 @@ var YAMLToJSON ={
     var path = {
         yaml: (params.yamlDir || config.i18n.yamlDir),
         js: (params.jsDir || config.i18n.jsDir),
-	   locale: (params.defaultLocale || config.i18n.defaultLocale)
+        locale: (params.defaultLocale || config.i18n.defaultLocale)
       };
     var JS_PATH_TOKEN = "--js-path=";
     var YAML_PATH_TOKEN = "--yaml-path=";
@@ -90,7 +90,7 @@ var YAMLToJSON ={
       else if(process.argv[i].indexOf(YAML_PATH_TOKEN)!=-1){
         path["yaml"] = process.argv[i].split(YAML_PATH_TOKEN)[1];
       }
-	 else if(process.argv[i].indexOf(DEFAULT_LOCALE_TOKEN)!=-1){
+      else if(process.argv[i].indexOf(DEFAULT_LOCALE_TOKEN)!=-1){
         path["locale"] = process.argv[i].split(DEFAULT_LOCALE_TOKEN)[1];
       }
     }
@@ -99,6 +99,6 @@ var YAMLToJSON ={
 }
 
 module.exports = {
-	name:"ember-i18n-yaml-to-json",
-	engine:YAMLToJSON
+  name:"ember-i18n-yaml-to-json",
+  engine:YAMLToJSON
 };
