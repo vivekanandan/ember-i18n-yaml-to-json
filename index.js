@@ -38,13 +38,16 @@ var YAMLToJSON ={
     this.refDoc = this.toJSON(refURL,defaultLocale);
     this.writeToJS(jsDir,defaultLocale,this.refDoc);
   },
+  convertInterpolations:function(text){
+    return text.replace(/%(\{\w+\})/g, '{$1}');
+  },
   writeToJS:function(jsDir,locale,content){
     var localeDir = jsDir+"/"+locale;
     if(!fs.existsSync(localeDir)){
       fs.mkdirSync(localeDir);
     }
     var jsFileURL = localeDir+"/translations.js";    
-    content = "export default "+JSON.stringify(content)+";";
+    content = "export default "+this.convertInterpolations(JSON.stringify(content))+";";
     fs.writeFileSync(jsFileURL, content);
   },
   toJSON:function(yamlFileURL,locale){
