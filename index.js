@@ -3,7 +3,7 @@
 
 /**
   * converts yaml file to js file
-  * params: 
+  * params:
   *   --yaml-path=<YAML DIRECTORY LOCATION>
   *   --js-path=<JS DIRECTORY LOCATION>
   **/
@@ -25,7 +25,7 @@ var YAMLToJSON ={
       var yamlFileURL = yamlDir+"/"+files[i];
       if(pathChecker.extname(files[i])!=".yml" || files[i]==(defaultLocale+".yml")){continue;}
       var locale = files[i].split(".")[0];
-      this.comparableDoc = this.toJSON(yamlFileURL,defaultLocale);
+      this.comparableDoc = this.toJSON(yamlFileURL,locale);
       this.doctorMissingElements(this.refDoc);
       this.writeToJS(jsDir,locale,this.comparableDoc);
     }
@@ -46,7 +46,7 @@ var YAMLToJSON ={
     if(!fs.existsSync(localeDir)){
       fs.mkdirSync(localeDir);
     }
-    var jsFileURL = localeDir+"/translations.js";    
+    var jsFileURL = localeDir+"/translations.js";
     content = "export default "+this.convertInterpolations(JSON.stringify(content))+";";
     fs.writeFileSync(jsFileURL, content);
   },
@@ -57,7 +57,7 @@ var YAMLToJSON ={
   },
   keyChain:[],
   doctorMissingElements:function(doc){
-    for(var key in doc){        
+    for(var key in doc){
       this.keyChain.push(key);
       var actual = this["refDoc."+this.keyChain.join(".")];
       var comparable = this["comparableDoc."+this.keyChain.join(".")];
@@ -71,9 +71,9 @@ var YAMLToJSON ={
         if(comparable ==undefined || (actualType != comparableType)){
           this["comparableDoc."+actualKey] = this["refDoc."+actualKey];
         }
-      }        
+      }
       this.keyChain.pop();
-    }      
+    }
   },
   parsePath: function(){
     var config = require('ember-i18n-yaml-to-json/config/environment')();
