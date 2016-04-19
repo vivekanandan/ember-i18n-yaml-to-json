@@ -17,6 +17,7 @@ var YAMLToJSON ={
     var jsDir = path.js;
     var defaultLocale = path.locale;
     var files = fs.readdirSync(yamlDir);
+    files = files.filter(function(fileName){ return fileName.match(/^\w{2}\.yml/); });
     if(!fs.existsSync(jsDir)){
       fs.mkdirSync(jsDir);
     }
