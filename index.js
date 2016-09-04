@@ -9,7 +9,9 @@
   **/
 var yaml = require('js-yaml');
 var fs = require('fs');
+var merge = require('deepmerge');
 var YAMLToJSON ={
+  fileType: "json",
   convert: function(){
     var pathChecker = require('path');
     var path = this.parsePath(arguments[0]);
@@ -26,8 +28,7 @@ var YAMLToJSON ={
       var yamlFileURL = yamlDir+"/"+files[i];
       if(pathChecker.extname(files[i])!=".yml" || files[i]==(defaultLocale+".yml")){continue;}
       var locale = files[i].split(".")[0];
-      this.comparableDoc = this.toJSON(yamlFileURL,locale);
-      this.doctorMissingElements(this.refDoc);
+      this.comparableDoc = merge(this.refDoc,this.toJSON(yamlFileURL,locale));
       this.writeToJS(jsDir,locale,this.comparableDoc);
     }
     console.log("\nYaml files from '"+pathChecker.resolve(yamlDir)+"' has been converted to js in '"+pathChecker.resolve(jsDir)+"'");
@@ -47,8 +48,11 @@ var YAMLToJSON ={
     if(!fs.existsSync(localeDir)){
       fs.mkdirSync(localeDir);
     }
-    var jsFileURL = localeDir+"/translations.js";
-    content = "export default "+this.convertInterpolations(JSON.stringify(content))+";";
+    var jsFileURL = localeDir+"/translations."+this.fileType;
+    content = this.convertInterpolations(JSON.stringify(content));
+    if(this.format=="js"){
+        content = "export default "+ content +";";
+    }
     fs.writeFileSync(jsFileURL, content);
   },
   toJSON:function(yamlFileURL,locale){
@@ -57,25 +61,6 @@ var YAMLToJSON ={
     return doc[locale];
   },
   keyChain:[],
-  doctorMissingElements:function(doc){
-    for(var key in doc){
-      this.keyChain.push(key);
-      var actual = this["refDoc."+this.keyChain.join(".")];
-      var comparable = this["comparableDoc."+this.keyChain.join(".")];
-      var actualType = typeof actual;
-      var comparableType = typeof comparable;
-      if((actual instanceof Object) && (comparable!=undefined && (actualType==comparableType))){
-        this.doctorMissingElements(doc[key]);
-      }
-      else{
-        var actualKey = this.keyChain.join(".");
-        if(comparable ==undefined || (actualType != comparableType)){
-          this["comparableDoc."+actualKey] = this["refDoc."+actualKey];
-        }
-      }
-      this.keyChain.pop();
-    }
-  },
   parsePath: function(){
     var config = require('ember-i18n-yaml-to-json/config/environment')();
     var params = arguments[0] || {};
@@ -87,6 +72,7 @@ var YAMLToJSON ={
     var JS_PATH_TOKEN = "--js-path=";
     var YAML_PATH_TOKEN = "--yaml-path=";
     var DEFAULT_LOCALE_TOKEN = "--default-locale=";
+    var FILE_TYPE_TOKEN = "--file-type=";
     for(var i=0;i<process.argv.length;i++){
       if(process.argv[i].indexOf(JS_PATH_TOKEN)!=-1){
         path["js"] = process.argv[i].split(JS_PATH_TOKEN)[1];
@@ -97,7 +83,11 @@ var YAMLToJSON ={
       else if(process.argv[i].indexOf(DEFAULT_LOCALE_TOKEN)!=-1){
         path["locale"] = process.argv[i].split(DEFAULT_LOCALE_TOKEN)[1];
       }
+      else if(process.argv[i].indexOf(FILE_TYPE_TOKEN)!=-1){
+        this.fileType = process.argv[i].split(FILE_TYPE_TOKEN)[1];
+      }
     }
+    if(params.fileType){this.fileType=params.fileType;}
     return path;
   }
 }

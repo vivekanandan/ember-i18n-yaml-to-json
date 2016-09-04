@@ -1,6 +1,6 @@
 {
   "name": "ember-i18n-yaml-to-json",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "Converts yaml files to js files, lets you maintain all your translations at one place.",
   "directories": {
     "doc": "doc",
@@ -35,7 +35,8 @@
     "ember-export-application-global": "^1.0.2",
     "ember-disable-prototype-extensions": "^1.0.0",
     "ember-try": "0.0.6",
-    "js-yaml": "^3.3.1"
+    "js-yaml": "^3.3.1",
+    "deepmerge": "^0.2.10"
   },
   "keywords": [
     "ember-addon"
@@ -46,12 +47,12 @@
   "ember-addon": {
     "configPath": "tests/dummy/config"
   },
-  "repository" : { 
+  "repository" : {
     "type" : "git",
     "url" : "https://github.com/vivekanandan/ember-i18n-yaml-to-json.git"
   },
   "homepage": "http://vivekanandan.github.io/ember-i18n-yaml-to-json",
-  "author": { 
+  "author": {
     "name" : "Vivekanandan M",
     "email" : "me@readvivek.com",
     "url" : "http://www.readvivek.com"
