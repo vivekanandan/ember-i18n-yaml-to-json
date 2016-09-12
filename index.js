@@ -6,12 +6,16 @@
   * params:
   *   --yaml-path=<YAML DIRECTORY LOCATION>
   *   --js-path=<JS DIRECTORY LOCATION>
+  *   --default-locale= < DEFAULT LOCALE >
+  *   --file-type=< JS/JSON SUPPORTED >
+  *   --format= < STRING WITH {{translations}} placeholder >
   **/
 var yaml = require('js-yaml');
 var fs = require('fs');
 var merge = require('deepmerge');
 var YAMLToJSON ={
-  fileType: "json",
+  fileType: "js",
+  format: "export default {{translations}} ;",
   convert: function(){
     var pathChecker = require('path');
     var path = this.parsePath(arguments[0]);
@@ -50,8 +54,8 @@ var YAMLToJSON ={
     }
     var jsFileURL = localeDir+"/translations."+this.fileType;
     content = this.convertInterpolations(JSON.stringify(content));
-    if(this.format=="js"){
-        content = "export default "+ content +";";
+    if(this.fileType=="js"){
+        content = this.format.replace("{{translations}}",content);
     }
     fs.writeFileSync(jsFileURL, content);
   },
@@ -73,6 +77,7 @@ var YAMLToJSON ={
     var YAML_PATH_TOKEN = "--yaml-path=";
     var DEFAULT_LOCALE_TOKEN = "--default-locale=";
     var FILE_TYPE_TOKEN = "--file-type=";
+    var FORMAT_TOKEN = "--format=";
     for(var i=0;i<process.argv.length;i++){
       if(process.argv[i].indexOf(JS_PATH_TOKEN)!=-1){
         path["js"] = process.argv[i].split(JS_PATH_TOKEN)[1];
@@ -86,8 +91,12 @@ var YAMLToJSON ={
       else if(process.argv[i].indexOf(FILE_TYPE_TOKEN)!=-1){
         this.fileType = process.argv[i].split(FILE_TYPE_TOKEN)[1];
       }
+      else if(process.argv[i].indexOf(FORMAT_TOKEN)!=-1){
+        this.format = process.argv[i].split(FORMAT_TOKEN)[1];
+      }
     }
     if(params.fileType){this.fileType=params.fileType;}
+    if(params.format){this.format=params.format;}
     return path;
   }
 }
