@@ -62,7 +62,9 @@ var YAMLToJSON ={
   toJSON:function(yamlFileURL,locale){
     var file = fs.readFileSync(yamlFileURL,'utf8');
     var doc = yaml.safeLoad(file);
-    return doc[locale];
+    //support for root element not resembling dialect as in locale string
+    doc = doc[locale] || doc[locale.split('-')[0]];
+    return doc;
   },
   keyChain:[],
   parsePath: function(){
